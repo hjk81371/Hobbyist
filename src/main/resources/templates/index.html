@@ -10,19 +10,39 @@
     <button id="button2">Button 2</button>
     <button id="button3">Button 3</button>
 
-    <script>
-        // JavaScript code for button click event handling
-        document.getElementById("button1").addEventListener("click", function() {
-            alert("Button 1 clicked!");
-        });
+    <div id="result"></div>
 
-        document.getElementById("button2").addEventListener("click", function() {
-            alert("Button 2 clicked!");
-        });
-
-        document.getElementById("button3").addEventListener("click", function() {
-            alert("Button 3 clicked!");
-        });
-    </script>
 </body>
+
+<script>
+    // JavaScript code for button click event handling
+    document.getElementById("button1").addEventListener("click", fetchData);
+
+    document.getElementById("button2").addEventListener("click", function() {
+        alert("Button 2 clicked!");
+    });
+
+    document.getElementById("button3").addEventListener("click", function() {
+        alert("Button 3 clicked!");
+    });
+
+    function fetchData() {
+        fetch('api/endpoint')
+        .then(response => response.text())
+        .then(data => {
+            // Handle the response data
+            console.log(data); // Log the data to the console
+
+            // Display the data in your HTML file
+            document.getElementById('result').innerHTML = data;
+        })
+        .catch(error => {
+            // Handle any errors that occur during the API call
+            console.error('Error:', error);
+        });
+    }
+
+</script>
+
+
 </html>
