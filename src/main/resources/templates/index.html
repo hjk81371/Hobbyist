@@ -4,7 +4,34 @@
     <title>Simple Website</title>
 
     <style>
-        /* Add some basic styling */
+
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .textbox {
+            width: 300px;
+            height: 50px;
+            border-radius: 25px;
+            border: 2px solid #aaa;
+            background-color: #fff;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        
+        .textbox:focus {
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
         body {
             margin: 0;
             padding: 0;
@@ -28,6 +55,7 @@
     <h1>Welcome to Hobbyist</h1>
     <h2>By Harrison Kirstein</h2>
     
+    <input id="addbox" type="text" class="textbox" placeholder="Add Hobby...">
 
     <div>
         <a id="button1" href="#" class="button">Button 1</a>
