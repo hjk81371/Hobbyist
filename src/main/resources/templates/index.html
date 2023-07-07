@@ -5,6 +5,12 @@
 
     <style>
 
+        .introduction {
+            position: fixed;
+            bottom: 0;
+            left: 50;
+        }
+
         body {
             background-color: #f2f2f2;
             font-family: Arial, sans-serif;
@@ -17,6 +23,10 @@
         }
         
         .textbox {
+            position: fixed;
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
             width: 300px;
             height: 50px;
             border-radius: 25px;
@@ -38,6 +48,7 @@
         }
         
         .button {
+
             display: block;
             width: 200px;
             height: 60px;
@@ -48,23 +59,66 @@
             font-size: 16px;
             margin-bottom: 10px;
         }
+
+        .ButDiv {
+            position: fixed;
+            top: 20%;
+            left: 5%;
+
+        }
+
+        .ButDiv a {
+            display: block;
+            margin-bottom: 50px;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+    
+        .add-button:hover {
+             background-color: #45a049;
+        }
+
+        .hobbyList {
+            list-style-type: none;
+            position: fixed;
+            right: 5%;
+            top: 5%;
+        }
+
+
     </style>
 
 </head>
 <body>
-    <h1>Welcome to Hobbyist</h1>
-    <h2>By Harrison Kirstein</h2>
+    <div class="introduction">
+        <h1>Welcome to Hobbyist</h1>
+    </div>
     
     <input id="addbox" type="text" class="textbox" placeholder="Add Hobby...">
+    <button id="add-button" class="add-button" onclick="addHobby()">Add</button>
 
-    <div>
-        <a id="button1" href="#" class="button">Button 1</a>
-        <a id="button2" href="#" class="button">Button 2</a>
-        <a id="button3" href="#" class="button">Button 3</a>
+    <div class="ButDiv">
+        <a id="button1" href="#" class="button">Similar Music</a>
+        <a id="button2" href="#" class="button">Similar Books</a>
+        <a id="button3" href="#" class="button">Similar Hobbies</a>
     </div>
 
 
     <div id="result"></div>
+
+    <li class = hobbyList id="hobbyList"></li>
 
 </body>
 
@@ -79,8 +133,31 @@
 
 
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+    function addHobby() {
+        var hobbyToAdd = document.getElementById("addbox").value;
+        if (hobbyToAdd) {
+            var newListElement = document.createElement("li");
+            newListElement.textContent = hobbyToAdd;
+
+            document.getElementById("hobbyList").appendChild(newListElement);
+
+            $.ajax({
+                url: "/api/add-hobby",
+                type: "POST",
+                data: hobbyToAdd,
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error("Error calling Java method:", error);
+                }
+            })
+        }
+    }
+
     // JavaScript code for button click event handling
     document.getElementById("button1").addEventListener("click", fetchData);
 

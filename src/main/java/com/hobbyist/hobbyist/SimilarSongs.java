@@ -1,6 +1,9 @@
 package com.hobbyist.hobbyist;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +13,49 @@ import com.google.gson.*;
 
 public class SimilarSongs {
     private static final String API_KEY = "c3825fc64587f9cce3b58912b58f25f8"; // Replace with your actual API key
+
+
+    public static String findSong(String songTitle) {
+
+        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + API_KEY
+                + "&track=" + songTitle + "&format=json";
+
+        try {
+            // Create URL object
+            URL url = new URL(urlString);
+
+            // Create HttpURLConnection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder response = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+
+            // Close the connection
+            connection.disconnect();
+
+            System.out.println(response.toString());
+
+            return response.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "Failed";
+    } // findSong
+
+
+
 
     private static String fetchData(String url) throws IOException {
         Scanner scanner = new Scanner(new URL(url).openStream(), "UTF-8");
