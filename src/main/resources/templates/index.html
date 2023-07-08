@@ -73,6 +73,10 @@
         }
 
         .add-button {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
             display: inline-block;
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -97,6 +101,38 @@
             top: 5%;
         }
 
+        /* Hover effect */
+        .songList li:hover {
+        background-color: #5c7686;
+        cursor: pointer;
+        }
+
+        /* Click effect */
+        .songList li.clicked {
+        animation: clickAnimation 0.3s;
+        }
+
+        @keyframes clickAnimation {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+        }
+
+        .songList {
+            list-style-type: none;
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+
 
     </style>
 
@@ -108,6 +144,8 @@
     
     <input id="addbox" type="text" class="textbox" placeholder="Add Hobby...">
     <button id="add-button" class="add-button" onclick="addHobby()">Add</button>
+
+    <ul class="songList" id="songList"></ul>
 
     <div class="ButDiv">
         <a id="button1" href="#" class="button">Similar Music</a>
@@ -138,25 +176,85 @@
 
     function addHobby() {
         var hobbyToAdd = document.getElementById("addbox").value;
-        if (hobbyToAdd) {
-            var newListElement = document.createElement("li");
-            newListElement.textContent = hobbyToAdd;
 
-            document.getElementById("hobbyList").appendChild(newListElement);
+        if (hobbyToAdd) {
 
             $.ajax({
                 url: "/api/add-hobby",
                 type: "POST",
                 data: hobbyToAdd,
                 success: function(response) {
-                    console.log(response);
+
+                    const jsonResponse = JSON.parse(response);
+
+                    // Extract the necessary data
+                    const trackMatches = jsonResponse.results.trackmatches;
+
+                    if (trackMatches) {
+                    const tracks = trackMatches.track;
+
+                    var counter = 0;
+
+                    if (Array.isArray(tracks)) {
+                        tracks.forEach((track) => {
+
+                        const songList = document.getElementById("songList");
+
+                        // Create the list items and add click event listeners
+
+                        if (counter > 5) {
+                            return true;
+                        }
+                        counter++;
+
+                        const listItem = document.createElement("li");
+                        const songTitle = track.name;
+                        const artistName = track.artist;
+
+                        listItem.textContent = songTitle + " - " + artistName;
+                        listItem.addEventListener("click", () => {
+                            addHobbyAllInfo(songTitle, artistName);
+                        });
+
+                        songList.appendChild(listItem);
+
+                        });
+
+                    } else {
+                        const artistName = tracks.artist;
+                        console.log("Artist: " + artistName);
+                    }
+                    } else {
+                    console.log("No tracks found for the given title.");
+                    }
+
                 },
                 error: function(error) {
                     console.error("Error calling Java method:", error);
                 }
-            })
+
+
+                // Assuming you have parsed the JSON response and stored it in a variable called 'jsonResponse'
+
+                // Retrieve the song list element
+
+
+                });
+            }
         }
-    }
+
+        function addHobbyAllInfo(title, artist) {
+
+            var newListElement = document.createElement("li");
+            newListElement.textContent = title + " - " + artist;
+            document.getElementById("hobbyList").appendChild(newListElement);
+            
+        }
+
+                
+    
+
+
 
     // JavaScript code for button click event handling
     document.getElementById("button1").addEventListener("click", fetchData);

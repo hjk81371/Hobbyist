@@ -18,8 +18,6 @@ public class ApiController {
     @PostMapping("/add-hobby")
     public String addHobby(@RequestBody String hobbyToAdd) {
 
-        String jsonSong = SimilarSongs.findSong(hobbyToAdd);
-        System.out.println(jsonSong);
-        return "Success";
+        return SimilarSongs.findSong(hobbyToAdd);
     }
 }

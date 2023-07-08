@@ -17,7 +17,7 @@ public class SimilarSongs {
 
     public static String findSong(String songTitle) {
 
-        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + API_KEY
+        String urlString = "http://ws.audioscrobbler.com/2.0/?method=track.search&api_key=" + API_KEY
                 + "&track=" + songTitle + "&format=json";
 
         try {
@@ -44,8 +44,6 @@ public class SimilarSongs {
 
             // Close the connection
             connection.disconnect();
-
-            System.out.println(response.toString());
 
             return response.toString();
         } catch (IOException e) {
