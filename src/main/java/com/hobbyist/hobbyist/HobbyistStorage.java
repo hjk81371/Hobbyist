@@ -14,9 +14,6 @@ public class HobbyistStorage {
     }
 
     public void addHobby(Hobby hobby, char identifier) {
-        if (identifier == 's') {
-            this.lastSong = (Song)hobby;
-        }
 
         hobbies.add(hobby);
     }
@@ -39,5 +36,20 @@ public class HobbyistStorage {
         for (Hobby hobby : hobbies) {
             System.out.println(hobby.getName());
         }
+    }
+
+    public String getAtIndex(int index) {
+        return this.hobbies.get(index).getName();
+    }
+
+
+    public Hobby[] getSongArray() {
+        int length = hobbies.size();
+        Hobby[] songsArray = new Hobby[length];
+        for (int i = 0; i < length; i++) {
+            Hobby song = hobbies.get(i);
+            songsArray[i] = song;
+        }
+        return songsArray;
     }
 }

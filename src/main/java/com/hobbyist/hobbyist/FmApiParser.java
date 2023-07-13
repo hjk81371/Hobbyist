@@ -11,7 +11,7 @@ import java.util.Scanner;
 import com.google.gson.*;
 
 
-public class SimilarSongs {
+public class FmApiParser {
     private static final String API_KEY = "c3825fc64587f9cce3b58912b58f25f8"; // Replace with your actual API key
 
 
@@ -45,6 +45,7 @@ public class SimilarSongs {
             // Close the connection
             connection.disconnect();
 
+
             return response.toString();
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,30 +63,40 @@ public class SimilarSongs {
         return data;
     }
 
-    public static List<String> searchSimilarMusic(Song song) throws IOException {
+    public static List<String> searchSimilarMusic(Hobby song) throws IOException {
+        String track = song.getName();
+        track = track.replace(" ", "+");
         String artist = song.getArtist();
         artist = artist.replace(" ", "+");
-        String genre = song.getGenre();
-        genre = genre.replace(" ", "+");
+  
 
-        String url = "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=" + artist +
+        String url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&track=" + track + "&artist=" + artist +
                 "&api_key=" + API_KEY + "&format=json";
         String data = fetchData(url);
 
         List<String> similarMusic = new ArrayList<>();
 
         JsonObject json = com.google.gson.JsonParser.parseString(data).getAsJsonObject();
-        if (json.has("similarartists")) {
-            JsonObject similarArtists = json.getAsJsonObject("similarartists");
-            JsonArray artistArray = similarArtists.getAsJsonArray("artist");
-            for (JsonElement element : artistArray) {
-                JsonObject artistObject = element.getAsJsonObject();
-                String name = artistObject.get("name").getAsString();
-                String match = artistObject.get("match").getAsString();
+        if (json.has("similartracks")) {
+            System.out.println("HAS SIMILAR TRACKS");
+            JsonObject similarTracks = json.getAsJsonObject("similartracks");
+            System.out.println("SimilarTracks JsonObj: " + similarTracks.toString());
+            JsonArray trackArray = similarTracks.getAsJsonArray("track");
+            for (JsonElement element : trackArray) {
+                System.out.println("Element: " + element.toString());
+                JsonObject trackObject = element.getAsJsonObject();
+                System.out.println("Track Obj: " + trackObject.toString());
+                String name = trackObject.get("name").getAsString();
+                System.out.println("NAME: " + name);
+                JsonObject artistObject = trackObject.getAsJsonObject("artist");
+                String artistName = artistObject.get("name").toString();
+                System.out.println("ARTIST NAME: " + artistName);
+                String match = trackObject.get("match").getAsString();
+                System.out.println("MATCH: " + match);
 
                 // Compare attributes to determine similarity
-                if (!name.equalsIgnoreCase(song.getArtist()) && Double.parseDouble(match) >= 0.5) {
-                    similarMusic.add(name);
+                if (!name.equalsIgnoreCase(song.getName()) && Double.parseDouble(match) >= 0.001) {
+                    similarMusic.add(name + " - " + artistName);
                 }
             }
         }

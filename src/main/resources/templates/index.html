@@ -132,6 +132,11 @@
             transform: translateX(-50%);
         }
 
+        #similarMusicResult {
+            list-style-type: none;
+        }
+            
+
 
 
     </style>
@@ -148,13 +153,13 @@
     <ul class="songList" id="songList"></ul>
 
     <div class="ButDiv">
-        <a id="button1" href="#" class="button">Similar Music</a>
+        <a id="similarMusicButton" href="#" class="button">Similar Music</a>
         <a id="button2" href="#" class="button">Similar Books</a>
         <a id="button3" href="#" class="button">Similar Hobbies</a>
     </div>
 
 
-    <div id="result"></div>
+    <li id="similarMusicResult"></li>
 
     <li class = hobbyList id="hobbyList"></li>
 
@@ -180,7 +185,7 @@
         if (hobbyToAdd) {
 
             $.ajax({
-                url: "/api/add-hobby",
+                url: "/api/find-hobby",
                 type: "POST",
                 data: hobbyToAdd,
                 success: function(response) {
@@ -234,10 +239,6 @@
                 }
 
 
-                // Assuming you have parsed the JSON response and stored it in a variable called 'jsonResponse'
-
-                // Retrieve the song list element
-
 
                 });
             }
@@ -245,43 +246,59 @@
 
         function addHobbyAllInfo(title, artist) {
 
+
+
+            const songList = document.getElementById("songList");
+            songList.innerHTML = "";
+
+            $.ajax({
+                url: "/api/add-hobby",
+                method: "POST",
+                data: {
+                    param1: title,
+                    param2: artist
+                },
+                success: function() {
+                    console.log("Hobby Added");
+                    console.log("JAVASCRIPT TITLE: " + title);
+                    console.log("JAVASCRIPT ARTIST: " + artist);
+                },
+                error: function(error) {
+                    console.error("Error sending hobby to java: ", error);
+                }
+            });
+
             var newListElement = document.createElement("li");
             newListElement.textContent = title + " - " + artist;
             document.getElementById("hobbyList").appendChild(newListElement);
             
         }
 
-                
-    
-
-
-
-    // JavaScript code for button click event handling
-    document.getElementById("button1").addEventListener("click", fetchData);
-
-    document.getElementById("button2").addEventListener("click", function() {
-        alert("Button 2 clicked!");
-    });
-
-    document.getElementById("button3").addEventListener("click", function() {
-        alert("Button 3 clicked!");
-    });
-
-    function fetchData() {
-        fetch('api/endpoint')
-        .then(response => response.text())
-        .then(data => {
-            // Handle the response data
-            console.log(data); // Log the data to the console
-
-            // Display the data in your HTML file
-            document.getElementById('result').innerHTML = data;
-        })
-        .catch(error => {
-            // Handle any errors that occur during the API call
-            console.error('Error:', error);
+        document.getElementById("similarMusicButton").addEventListener("click", () => {
+            findSimilarMusic();
         });
-    }
+
+        function findSimilarMusic() {
+            const similarMusicResult = document.getElementById("similarMusicResult");
+            $.ajax({
+                url: "/api/find-similar",
+                type: "GET",
+                success: function(response) {
+                    for (i = 0; i < response.length && i < 6; i++) {
+                        var newSimilarElement = document.createElement("li");
+                        newSimilarElement.textContent = response[i];
+                        similarMusicResult.appendChild(newSimilarElement);
+                    }
+ 
+                },
+
+                error: function(error) {
+                    console.error("Error getSimilar Java method:", error);
+                }
+
+                });
+        }
+
 
 </script>
 

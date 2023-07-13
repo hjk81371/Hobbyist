@@ -1,12 +1,10 @@
 package com.hobbyist.hobbyist;
 
 public class Song extends Hobby {
-    private String artist;
     private String genre;
 
-    public Song(String name) {
-        super(name);
-        this.artist = null;
+    public Song(String name, String artist) {
+        super(name, artist);
         this.genre = null;
     }
 
@@ -15,7 +13,7 @@ public class Song extends Hobby {
     }
 
     public void setArtist(String artist) {
-        this.artist = artist;
+        super.setArtist(artist);
     }
 
     public void setGenre(String genre) {
@@ -27,7 +25,7 @@ public class Song extends Hobby {
     }
 
     public String getArtist() {
-        return this.artist;
+        return super.getArtist();
     }
 
     public String getGenre() {
