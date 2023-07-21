@@ -65,10 +65,21 @@ public class FmApiParser {
 
     public static List<String> searchSimilarMusic(Hobby song) throws IOException {
         String track = song.getName();
-        track = track.replace(" ", "+");
         String artist = song.getArtist();
+
+        for (int i = 0; i < track.length(); i++) {
+            if (track.charAt(i) == '(') {
+                track = track.substring(0, i);
+                break;
+            }
+        } // for
+        track = track.trim();
+        track = track.replace(" ", "+");
         artist = artist.replace(" ", "+");
-  
+
+        System.out.println("search track: " + track);
+        System.out.println("search artist: " + artist);
+
 
         String url = "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&track=" + track + "&artist=" + artist +
                 "&api_key=" + API_KEY + "&format=json";
