@@ -63,7 +63,7 @@ public class FmApiParser {
         return data;
     }
 
-    public static List<String> searchSimilarMusic(Hobby song) throws IOException {
+    public static Song[] searchSimilarMusic(Hobby song) throws IOException {
         String track = song.getName();
         String artist = song.getArtist();
 
@@ -85,7 +85,7 @@ public class FmApiParser {
                 "&api_key=" + API_KEY + "&format=json";
         String data = fetchData(url);
 
-        List<String> similarMusic = new ArrayList<>();
+        Song[] similarMusic = new Song[10];
 
         JsonObject json = com.google.gson.JsonParser.parseString(data).getAsJsonObject();
         if (json.has("similartracks")) {
@@ -93,6 +93,7 @@ public class FmApiParser {
             JsonObject similarTracks = json.getAsJsonObject("similartracks");
             System.out.println("SimilarTracks JsonObj: " + similarTracks.toString());
             JsonArray trackArray = similarTracks.getAsJsonArray("track");
+            int index = 0;
             for (JsonElement element : trackArray) {
                 System.out.println("Element: " + element.toString());
                 JsonObject trackObject = element.getAsJsonObject();
@@ -105,32 +106,36 @@ public class FmApiParser {
                 String match = trackObject.get("match").getAsString();
                 System.out.println("MATCH: " + match);
 
+
+                Song newSong = new Song(name, artistName);
+
                 // Compare attributes to determine similarity
                 if (!name.equalsIgnoreCase(song.getName()) && Double.parseDouble(match) >= 0.001) {
-                    similarMusic.add(name + " - " + artistName);
+                    similarMusic[index] = newSong;
+                    index++;
+                    if (index > 9) return similarMusic;
+                    // similarMusic.add(name + " - " + artistName);
                 }
             }
         }
-
-        return similarMusic;
-    }
-/*
-    public static void main(String[] args) {
-        // Assuming you have a HobbyLibrary instance called library
-        HobbyLibrary library = new HobbyLibrary();
-
-        Song song1 = new Song("Song 1", "Artist 1", "Pop");
-        library.addHobby(song1);
-
-        try {
-            Song song = (Song) library.getHobbies().get(0); // Assuming the first hobby is a song
-            List<String> similarMusic = searchSimilarMusic(song);
-            for (String artist : similarMusic) {
-                System.out.println(artist);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        int i = 0;
+        while (similarMusic[i] != null) {
+            i++;
         }
+        Song[] filledArray = new Song[i];
+        for (int j = 0; j < i; j++) {
+            filledArray[j] = similarMusic[j];
+        }
+        return filledArray;
+
+        //return similarMusic;
+    } // searchSimilarMusic
+
+    public static String getSimilarArtists(Song song) {
+        return "";
     }
-    */
+
+
+
+
 }

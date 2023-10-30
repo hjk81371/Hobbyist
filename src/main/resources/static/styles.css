@@ -1,0 +1,217 @@
+
+
+.introduction {
+    position: fixed;
+    bottom: 0;
+    left: 50;
+}
+
+
+body {
+    background: linear-gradient(135deg, #2e3192, #5ed2a0); /* Use a gradient with modern color shades */
+    background-size: 400% 400%; /* Make the gradient larger than the body */
+    animation: gradientAnimation 15s ease infinite; /* Apply an animation to create the illusion of movement */
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%; /* Start position of the gradient */
+    }
+    50% {
+        background-position: 100% 50%; /* Midway point of the animation */
+    }
+    100% {
+        background-position: 0% 50%; /* Return to the initial position */
+    }
+}
+
+.textbox {
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 50px;
+    border-radius: 25px;
+    border: 2px solid #aaa;
+    background-color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.textbox:focus {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.button {
+
+    transform: translateX(-50%);
+    text-decoration: none;
+    background: linear-gradient(135deg, #2e3192, #5ed2a0);
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.button:hover {
+    background-color: #5ed2a0;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5);
+    padding: 17px, 27px;
+    font-size: 18px;
+}
+
+.ButDiv {
+    position: fixed;
+    top: 20%;
+    left: 5%;
+
+}
+
+.ButDiv a {
+    display: block;
+    margin-bottom: 50px;
+}
+
+.add-button {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-decoration: none;
+    background: linear-gradient(135deg, #2e3192, #5ed2a0);
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.add-button:hover {
+     background-color: #5ed2a0;
+     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5);
+     padding: 17px, 27px;
+     font-size: 18px;
+}
+
+
+#songList {
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #018fdb;
+    padding: 10px;
+    display: none; /* Initially hide the list */
+}
+
+#songList:not(:empty) {
+    display: block;
+}
+
+#showMyMusicButton {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+}
+
+#findSimilarMusicButton {
+    position: fixed;
+    top: 10%;
+    right: 10%;
+}
+
+#newSimilarMusicButton {
+    position: fixed;
+    top: 16.5%;
+    transform: translateX(5%);
+    right: 10%;
+    display: none;
+}
+
+#mySongsList {
+    position: fixed;
+    top: 22%;
+    left: 10%;
+    margin: 5px;
+    transform: translateX(-50%);
+    background-color: #018fdb;
+    padding: 10px;
+    display: none;
+    max-width: 275px;
+    border-radius: 15px;
+    border: 1px solid black;
+}
+
+#similarMusicResult {
+    position: fixed;
+    top: 22%;
+    right: 10%;
+    margin: 5px;
+    background-color: #018fdb;
+    transform: translateX(25%);
+    padding: 10px;
+    display: none;
+    max-width: 275px;
+    border-radius: 15px;
+    border: 1px solid black;
+}
+
+
+.list {
+    list-style-type: none;
+    list-style-type: none;
+    position: fixed;
+}
+/* Hover effect */
+.list li:hover {
+background-color: #5c7686;
+cursor: pointer;
+}
+
+/* Click effect */
+.list li.clicked {
+animation: clickAnimation 0.3s;
+}
+
+@keyframes clickAnimation {
+0% {
+    transform: scale(1);
+}
+50% {
+    transform: scale(1.1);
+}
+100% {
+    transform: scale(1);
+}
+}
+
+    
+

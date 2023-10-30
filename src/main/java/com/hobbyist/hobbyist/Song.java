@@ -2,10 +2,15 @@ package com.hobbyist.hobbyist;
 
 public class Song extends Hobby {
     private String genre;
+    String mbid;
 
     public Song(String name, String artist) {
         super(name, artist);
         this.genre = null;
+    }
+
+    public void setMbid(String mbid) {
+        this.mbid = mbid;
     }
 
     public void setTitle(String title) {
@@ -18,6 +23,10 @@ public class Song extends Hobby {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getMid() {
+        return this.mbid;
     }
 
     public String getTitle() {
