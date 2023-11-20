@@ -22,19 +22,28 @@ public class ApiController {
     }
 
     @PostMapping("/add-hobby")
-    public void addNewHobby(@RequestParam("param1") String hobbyName, @RequestParam("param2") String hobbyArtist) {
- 
-
+    public boolean addNewHobby(@RequestParam("param1") String hobbyName, @RequestParam("param2") String hobbyArtist) {
 
         Hobby newHobby = new Hobby(hobbyName, hobbyArtist);
 
-        library.addHobby(newHobby, 's');
+        return library.addHobby(newHobby, 's');
     }
 
     @GetMapping("/find-similar")
-    public String[] findSimilar() {
-        return SimilarMusic.findSimilarMusic(library);
+    public String[] findSimilar(@RequestParam("param1") String similarityWeight, @RequestParam("param2") String songWeights) {
+        return SimilarMusic.findSimilarMusic(library, similarityWeight, songWeights);
     }
+
+    @GetMapping("/get-music-list")
+    public String[] getSongList() {
+        return FmApiParser.getSongListJson(library);
+    }
+
+    @PostMapping("/delete-hobby")
+    public boolean deleteSong(@RequestParam("param1") String title, @RequestParam("param2") String artist) {
+        return library.deleteSong(title, artist);
+    }
+
 
 
 

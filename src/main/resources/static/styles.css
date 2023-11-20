@@ -126,8 +126,10 @@ body {
     position: fixed;
     top: 35%;
     left: 50%;
+    border: 1px solid white;
+    border-radius: 10px;
     transform: translateX(-50%);
-    background-color: #018fdb;
+    background-color: rgba(255, 255, 255, 0.15);
     padding: 10px;
     display: none; /* Initially hide the list */
 }
@@ -139,56 +141,64 @@ body {
 #showMyMusicButton {
     position: fixed;
     top: 10%;
-    left: 10%;
+    left: 12.5%;
 }
 
 #findSimilarMusicButton {
     position: fixed;
-    top: 10%;
-    right: 10%;
+    top: 86%;
+    left: 10%;
 }
+
 
 #newSimilarMusicButton {
     position: fixed;
-    top: 16.5%;
-    transform: translateX(5%);
-    right: 10%;
+    top: 14%;
+    right: 1.2%;
     display: none;
 }
 
 #mySongsList {
     position: fixed;
     top: 22%;
-    left: 10%;
+    left: 12%;
     margin: 5px;
     transform: translateX(-50%);
     background-color: #018fdb;
     padding: 10px;
     display: none;
-    max-width: 275px;
+    width: 314px;
     border-radius: 15px;
-    border: 1px solid black;
+    border: 1px solid white;
 }
 
 #similarMusicResult {
     position: fixed;
     top: 22%;
-    right: 10%;
+    right: 4%;
     margin: 5px;
     background-color: #018fdb;
-    transform: translateX(25%);
+    transform: translateX(10%);
     padding: 10px;
     display: none;
-    max-width: 275px;
+    width: 314px;
     border-radius: 15px;
-    border: 1px solid black;
+    border: 1px solid white;
+    gap: 10px;
+}
+
+.loadingIcon {
+    text-align: center;
+    padding: 10px;
+    background-color: #f0f0f0;
 }
 
 
 .list {
     list-style-type: none;
-    list-style-type: none;
     position: fixed;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
 }
 /* Hover effect */
 .list li:hover {
@@ -213,5 +223,62 @@ animation: clickAnimation 0.3s;
 }
 }
 
+li {
+    position: relative;
+    background-color: #868686;
+    border-radius: 5px;
+    border: white 1px solid;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.songNameListDiv {
+    text-align: center;
+}
+
+.artistNameListDiv {
+    text-align: left;
+    font-size: x-small;
+}
+
+.slider {
+    text-align: center;
+    margin-top: 25rem;
+}
+
+.considerationSlider {
+    position: relative;
+    left: 5%;
+    margin: 4px, 4px, 4px, 4px;
+    width: 16vh;
+    height: 3vh;
+}
+
+.considerationSlider input {
+    width: 100%;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+.mySongsDeleteButton {
+    position: absolute;
+    margin: 2px 2px 2px 2px;
+    top: 40%;
+    right: 2%;
+}
+
+.mySongsDeleteButton:hover {
+    color: rgb(180, 35, 35);
+}
     
 

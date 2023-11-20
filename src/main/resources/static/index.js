@@ -20,11 +20,12 @@ function addHobby() {
                 const tracks = trackMatches.track;
 
                 var counter = 0;
+                const songList = document.getElementById("songList");
+                songList.innerHTML = "";
 
                 if (Array.isArray(tracks)) {
                     tracks.forEach((track) => {
 
-                    const songList = document.getElementById("songList");
 
                     // Create the list items and add click event listeners
 
@@ -37,7 +38,15 @@ function addHobby() {
                     const songTitle = track.name;
                     const artistName = track.artist;
 
-                    listItem.textContent = songTitle + " - " + artistName;
+                    const songDiv = document.createElement('div');
+                    songDiv.textContent = songTitle;
+                    songDiv.className = 'songNameListDiv';
+                    listItem.appendChild(songDiv);
+                    const artistDiv = document.createElement('div');
+                    artistDiv.textContent = "by " + artistName;
+                    artistDiv.className = 'artistNameListDiv';
+                    listItem.appendChild(artistDiv);
+
                     listItem.addEventListener("click", () => {
                         addHobbyAllInfo(songTitle, artistName);
                     });
@@ -65,6 +74,23 @@ function addHobby() {
     }
 } // addHobby
 
+function deleteHobby(title, artist) {
+    $.ajax({
+        url: "/api/delete-hobby",
+        method: "POST",
+        data: {
+            param1: title,
+            param2: artist
+        },
+        success: function (response) {
+            updateMyMusicList();
+        },
+        error: function(error) {
+            console.error("Failed to remove song: " + title + " - " + artist);
+        }
+    });
+}
+
 
 function addHobbyAllInfo(title, artist) {
 
@@ -80,20 +106,14 @@ function addHobbyAllInfo(title, artist) {
                 param1: title,
                 param2: artist
             },
-            success: function() {
-                console.log("Hobby Added");
-                console.log("JAVASCRIPT TITLE: " + title);
-                console.log("JAVASCRIPT ARTIST: " + artist);
+            success: function(response) {
+                updateMyMusicList();
             },
             error: function(error) {
                 console.error("Error sending hobby to java: ", error);
             }
         });
 
-        var newListElement = document.createElement("li");
-        newListElement.textContent = title + " - " + artist;
-        document.getElementById("mySongsList").appendChild(newListElement);
-        
 } // addHobbyAllInfo
 
 document.getElementById("similarMusicButton").addEventListener("click", () => {
@@ -101,24 +121,60 @@ document.getElementById("similarMusicButton").addEventListener("click", () => {
 });
 
 function findSimilarMusic() {
+
+        const similarityWeightElement = document.getElementById("similarity-weight");
+
+        const similarityWeight = similarityWeightElement.value;
+
+        console.log("similarity weight: " + similarityWeight);
+
+        var songWeightsArray = "";
+
+        var songsToFindWeights = document.getElementById("mySongsList");
+        for (i = 0; i < songsToFindWeights.children.length; i++) {
+            songWeightsArray += document.getElementsByClassName('songSlider')[i].value;
+            if (i < songsToFindWeights.children.length - 1) {
+                songWeightsArray += ',';
+            }
+        } // for
+        for (i = 0; i < songsToFindWeights.children.length; i++) {
+            console.log("WEIGHTS [" + i + "] = " + songWeightsArray);
+        } // for
+
         const similarMusicResult = document.getElementById("similarMusicResult");
         similarMusicResult.innerHTML = "";
         $.ajax({
             url: "/api/find-similar",
             type: "GET",
+            data: {
+                param1: similarityWeight, param2: songWeightsArray,
+            },
             success: function(response) {
+
+                if (response == null) {
+                    console.log("NO RESULTS FROM JSON");
+                    similarMusicResult.innerHTML = "No Results";
+                }
 
                 for (i = 0; i < response.length; i++) {
                     var newSimilarElement = document.createElement("li");
                     var song = JSON.parse(response[i]);
                     console.log(response[i]);
-                    newSimilarElement.textContent = song.name + " - " + song.artist;
+
+                    const songDiv = document.createElement('div');
+                    songDiv.textContent = song.name;
+                    songDiv.className = 'songNameListDiv';
+                    newSimilarElement.appendChild(songDiv);
+                    const artistDiv = document.createElement('div');
+                    artistDiv.textContent = "by " + song.artist;
+                    artistDiv.className = 'artistNameListDiv';
+                    newSimilarElement.appendChild(artistDiv);
+
 
                     const songName = song.name;
                     const artistName = song.artist;
 
                     newSimilarElement.addEventListener('click', () => {
-                        console.log("Event Listener name and artist : " + songName + " " + artistName);
                         addHobbyAllInfo(songName, artistName);
                     });
 
@@ -139,6 +195,7 @@ function showMyMusicButton() {
     const myMusicButton = document.getElementById("showMyMusicButton");
     const myMusicList = document.getElementById("mySongsList");
     if (!myMusicList.style.display || myMusicList.style.display == 'none') {
+        updateMyMusicList();
         myMusicList.style.display = 'block';
         myMusicButton.innerHTML = "Hide";
     } else {
@@ -160,6 +217,71 @@ function findSimilarMusicButton() {
         similarMusicList.style.display = 'none';
         similarMusicButton.innerHTML = "Find Similar Music"
     }
+}
+
+function updateMyMusicList() {
+
+    const mySongsList = document.getElementById("mySongsList");
+    mySongsList.innerHTML = "";
+
+        $.ajax({
+            url: "/api/get-music-list",
+            type: "GET",
+            success: function(response) {
+
+                if (response == null) {
+                    console.log("NO SONGS IN SONG LIBRARY");
+                    mySongsList.innerHTML = "No Results";
+                }
+
+                for (i = 0; i < response.length; i++) {
+                    var newSongElement = document.createElement("li");
+                    var song = JSON.parse(response[i]);
+
+                    const currName = song.name;
+                    const currArtist = song.artist;
+
+                    const songDiv = document.createElement('div');
+                    songDiv.textContent = currName;
+                    songDiv.className = 'songNameListDiv';
+                    newSongElement.appendChild(songDiv);
+                    const sliderDiv = document.createElement('div');
+                    sliderDiv.setAttribute("class", "considerationSlider");
+                    const sliderElement = document.createElement('input');
+                    sliderElement.setAttribute("class", "songSlider")
+                    sliderElement.setAttribute("type", "range");
+                    sliderElement.setAttribute("min", "-50");
+                    sliderElement.setAttribute("max", "100");
+                    sliderElement.setAttribute("value", "50");
+                    sliderDiv.appendChild(sliderElement);
+                    newSongElement.appendChild(sliderDiv);
+
+                    const artistDiv = document.createElement('div');
+                    artistDiv.textContent = "by " + currArtist;
+                    artistDiv.className = 'artistNameListDiv';
+                    newSongElement.appendChild(artistDiv);
+
+                    const deleteButton = document.createElement('span');
+                    deleteButton.setAttribute("class", "material-symbols-outlined mySongsDeleteButton");
+                    deleteButton.textContent = 'delete';
+                    newSongElement.appendChild(deleteButton);
+
+                    deleteButton.addEventListener('click', () => {
+                        deleteHobby(currName, currArtist);
+                    });
+
+                    mySongsList.appendChild(newSongElement);
+                }
+
+            },
+
+            error: function(error) {
+                console.error("Error getSimilar Java method:", error);
+            }
+
+        });
+
+
 }
 
 

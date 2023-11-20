@@ -3,6 +3,7 @@
 <head>
     <title>Simple Website</title>
     <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
     <div class="introduction">
@@ -22,7 +23,15 @@
 
     <ul class="list" id="songList"></ul>
 
-    <ul class="list" id="similarMusicResult"></ul>
+    <ul class="list" id="similarMusicResult"><li id="loadingIcon" class="loadingIcon" style="display: none;"></li></ul>
+
+        <div class="slider">
+            <p>Similarity Sensitivity</p>
+            <input id="similarity-weight" type="range" min="0" max="100" value="0" oninput="rangeValue1.innerText = this.value">
+            <p id="rangeValue1">0</p>
+        </div>
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
